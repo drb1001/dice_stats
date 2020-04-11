@@ -1,0 +1,9 @@
+# compiled python files
+*.pyc
+__pycache__/*
+
+# env files
+.env
+
+# dev config
+config.py
