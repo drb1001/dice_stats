@@ -10,8 +10,8 @@ app = Flask(__name__)
 # port = int(os.environ.get("PORT", 5000))
 # app.config.from_object(os.environ['APP_SETTINGS'])
 
-app.config.from_object("config.DevelopmentConfig")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config.from_object("config.DevelopmentConfig")
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # from models import RollModel, RollDetailModel
