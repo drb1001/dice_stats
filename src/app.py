@@ -1,9 +1,10 @@
 import os
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+from waitress import serve
 
 from utils import tidy_input, parse_input
-from read_data import read_data_from_db
+# from read_data import read_data_from_db
 
 
 app = Flask(__name__)
@@ -26,7 +27,7 @@ def index():
     if input is not None:
         input_tidy = tidy_input(input)
         input_parsed = parse_input(input_tidy)
-        output = read_data_from_db(app, db, input_parsed)
+        # output = read_data_from_db(app, db, input_parsed)
 
         return render_template('template.html', text=input_parsed, value=input)
 
@@ -34,4 +35,5 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    serve(app, host="0.0.0.0", port=5000)
+    # app.run(host='0.0.0.0', port=5000, debug=True)
