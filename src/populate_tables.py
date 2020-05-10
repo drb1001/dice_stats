@@ -1,11 +1,13 @@
-from app import db, app
 from models import RollModel, RollDetailModel
 
-def create_tables():
+
+def create_tables(app, db):
+    """ """
     db.create_all()
 
-def repopulate_roll_table(max_dice_total=20):
-    """"""
+
+def repopulate_roll_table(app, db, max_dice_total=20):
+    """ """
 
     with app.app_context():
 
@@ -62,39 +64,3 @@ def repopulate_roll_table(max_dice_total=20):
 def repopulate_roll_details_table(max_n):
     """"""
     pass
-
-
-
-
-
-if __name__ == '__main__':
-    create_tables()
-    repopulate_roll_table()
-
-
-
-# from app import db
-#
-# class Book(db.Model):
-#     __tablename__ = 'books'
-#
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String())
-#     author = db.Column(db.String())
-#     published = db.Column(db.String())
-#
-#     def __init__(self, name, author, published):
-#         self.name = name
-#         self.author = author
-#         self.published = published
-#
-#     def __repr__(self):
-#         return '<id {}>'.format(self.id)
-#
-#     def serialize(self):
-#         return {
-#             'id': self.id,
-#             'name': self.name,
-#             'author': self.author,
-#             'published':self.published
-#         }

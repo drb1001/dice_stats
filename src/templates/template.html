@@ -5,21 +5,36 @@
   <meta charset="UTF-8">
   <title>Dice Stats</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
-  <!-- <link rel="stylesheet"> -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 
 <body>
   <div class="input">
-    <p>Put your dice roll here to see some stats:</p>
+    <p>Put your dice rolls here to see some stats:</p>
+
     <form action='/' method="GET">
-      <input type="text" id="myInput" name="myInput" value="{{value}}" placeholder="eg: 2d10+3">
+      <input type="text" id="d1Input" name="d1" value="{{d1_value}}" placeholder="eg: 2d10+3">
+      <input type="text" id="d2Input" name="d2" value="{{d2_value}}" placeholder="eg: 3d8 kh2">
+      <input type="submit" value="Submit">
     </form>
   </div>
 
-  <div class="show-data">
-    <p>{{text}}</p>
+
+  <div class="chart">
+    <svg/>
   </div>
+
+  <div class="table">
+    <p>{{text_1a}}</p>
+    <p>{{text_1b}}</p>
+    <p>{{text_2a}}</p>
+    <p>{{text_2b}}</p>
+  </div>
+
+
+  <script src="../static/chart.js"></script>
 
 </body>
 </html>
