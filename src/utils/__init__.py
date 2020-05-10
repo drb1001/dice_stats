@@ -1,2 +1,2 @@
 from .input_parser import tidy_input, parse_input, InvalidInput
-# from .read_data import read_data
+from .calculate_stats import calc_stats

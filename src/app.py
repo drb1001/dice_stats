@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, render_template, jsonify
 from waitress import serve
 
-from utils import tidy_input, parse_input
+from utils import tidy_input, parse_input, calc_stats
 from read_data import read_data_from_db
 from populate_tables import create_tables, repopulate_roll_table
 
@@ -26,33 +26,12 @@ def show_dice_stats():
     d2_input = request.args.get('d2', None, type=str)
     app.logger.info('D1 Input: {}; D2 input: {}'.format(d1_input, d2_input))
 
-    # if d1_input is not None and d1_input != '':
-    #     d1_input_tidy = tidy_input(d1_input)
-    #     d1_input_parsed = parse_input(d1_input_tidy)
-    # else:
-    #     d1_input_parsed = ''
-    #     d1_input = ''
-    #
-    # if d2_input is not None and d2_input != '':
-    #     d2_input_tidy = tidy_input(d2_input)
-    #     d2_input_parsed = parse_input(d2_input_tidy)
-    #     d2_output = read_data_from_db(app, db, RollModel, d2_input_parsed)
-    # else:
-    #     d2_input_parsed = ''
-    #     d2_output = ''
-    #     d2_input = ''
-    #
-    # context_dict = {'text_1a': d1_input_parsed, 'text_1b': d1_output, 'd1_value': d1_input,
-    #                 'text_2a': d2_input_parsed, 'text_2b': d2_output, 'd2_value': d2_input}
-
     context_dict = {'d1_value': d1_input, 'd2_value': d2_input}
-
     return render_template('template.html', **context_dict)
 
 
 @app.route('/get_data', methods=['GET'])
 def get_data():
-
     input = request.args.get('d', None, type=str)
     app.logger.info('get_data input:'.format(input))
 
@@ -60,8 +39,16 @@ def get_data():
     if input is not None and input != '':
         input_tidy = tidy_input(input)
         input_parsed = parse_input(input_tidy)
-        output = read_data_from_db(app, db, RollModel, input_parsed)
-    return jsonify(output)
+        rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
+
+        app.logger.info('00000000')
+        stats_output = calc_stats(app, name=input_tidy, rolls=rolls_output)
+
+        app.logger.info('11111111111')
+
+
+    return jsonify({'rolls': rolls_output, 'stats': stats_output})
+    # return jsonify()
 
 
 # sanity check route
