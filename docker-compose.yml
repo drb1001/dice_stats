@@ -12,8 +12,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - 5432:5432
-    volumes:
-      - flask-app-db:/var/lib/postgresql/data
 
   app:
     container_name: app
@@ -31,7 +29,3 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - postgres
-
-
-volumes:
-  flask-app-db:
