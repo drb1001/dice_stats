@@ -13,6 +13,8 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
     ports:
       - 5432:5432
+    networks:
+      - default
 
   app:
     container_name: app
@@ -28,5 +30,7 @@ services:
       - FLASK_PORT=${FLASK_PORT}
       - APP_ENV=${APP_ENV}
       - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - default
     depends_on:
       - postgres
