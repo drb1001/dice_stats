@@ -62,7 +62,7 @@ def canary():
 
 if __name__ == '__main__':
 
-    port = int(os.environ.get("FLASK_PORT", 5000))
+    port = int(os.environ.get("PORT", 5000))
     env = os.environ.get("APP_ENV")
 
     app.logger.info('Starting server')

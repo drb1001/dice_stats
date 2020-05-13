@@ -1,1 +1,1 @@
-web: waitress-serve --port=$FLASK_PORT app:app
+web: waitress-serve --port=${PORT} app:app

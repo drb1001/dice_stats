@@ -27,7 +27,7 @@ services:
     volumes:
       - ./src/:/src/
     environment:
-      - FLASK_PORT=${FLASK_PORT}
+      - PORT=${PORT}
       - APP_ENV=${APP_ENV}
       - DATABASE_URL=${DATABASE_URL}
     networks:
