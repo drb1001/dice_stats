@@ -8,8 +8,11 @@ from populate_tables import create_tables, repopulate_roll_table
 
 
 app = Flask(__name__)
+app.logger.info('App created')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
+app.logger.info('DATABASE_URL config set')
 
 
 from models import db, RollModel, RollDetailModel
@@ -17,7 +20,7 @@ db.init_app(app)
 with app.app_context():
     create_tables(app, db)
     repopulate_roll_table(app, db)
-
+app.logger.info('Database tables populated')
 
 @app.route('/', methods=['GET'])
 def show_dice_stats():
@@ -62,9 +65,11 @@ if __name__ == '__main__':
     port = int(os.environ.get("FLASK_PORT", 5000))
     env = os.environ.get("APP_ENV")
 
+    app.logger.info('Starting server')
+
     if env == "LOCAL_DEV":
-        print("In dev now")
+        app.logger.info('In dev now')
         app.run(host='0.0.0.0', port=port, debug=True)
     else:
-        print("In prod now")
+        app.logger.info('In prod now')
         serve(app, host="0.0.0.0", port=port)
