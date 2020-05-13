@@ -6,7 +6,7 @@ def create_tables(app, db):
     db.create_all()
 
 
-def repopulate_roll_table(app, db, max_dice_total=20):
+def repopulate_roll_table(app, db, max_dice_total=10):
     """ """
 
     with app.app_context():
