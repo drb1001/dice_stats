@@ -1,4 +1,3 @@
-import numpy as np
 
 # def weighted_percentile_of_score(a, weights, score, kind='weak'):
 #     npa = np.array(a)
@@ -24,7 +23,7 @@ import numpy as np
 
 
 # a = [1, 2, 3, 4]
-# weights = [2, 2, 3, 3]
+# weights = [0.2, 0.2, 0.3, 0.3]
 # print(weighted_percentile_of_score(a, weights, 3))  # 70.0 as desired.
 
 
@@ -33,7 +32,7 @@ def calc_stats(app, name, rolls):
     pips_array = [int(i["pip_total"]) for i in rolls]
     prob_array = [float(i["probability"]) for i in rolls]
 
-    avg_pips = round(np.average(pips_array, weights=prob_array),2)
+    avg_pips = round(sum([i*j for i,j in zip(pips_array,prob_array)]), 2)
     min_pips = min(pips_array)
     max_pips = max(pips_array)
 
