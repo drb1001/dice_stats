@@ -3,9 +3,12 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <title>Dice Stats</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon_io/favicon-16x16.png') }}"/>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -13,37 +16,85 @@
 </head>
 
 <body>
-  <div class="input">
-    <p>Put your dice rolls here to see some stats:</p>
 
-    <form action='/' method="GET">
-      <input type="text" id="d1Input" name="d1" value="{{d1_value}}" placeholder="eg: 2d10+3">
-      <input type="text" id="d2Input" name="d2" value="{{d2_value}}" placeholder="eg: 3d8 kh2">
-      <input type="submit" value="Submit">
-    </form>
-  </div>
+  <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8 col-md-7 py-4">
+                <h4 class="text-white">About</h4>
+                <p class="text-muted">An experimental site that was hastily built during Covid-19 quarantine as a learning project.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="navbar navbar-dark">
+          <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+              <h2>Dice Stats</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">Dice Stats</h1>
+          <p class="lead text-muted">Add some dice rolls to compare stats</p>
+          <div id="input">
+            <form action='/' method="GET" class="form-inline justify-content-center">
+              <div class="form-group">
+                <input class="form-control" type="text" id="d1Input" name="d1" value="{{d1_value}}" placeholder="eg: 2d10+3">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" id="d2Input" name="d2" value="{{d2_value}}" placeholder="eg: 3d8 kh2">
+              </div>
+              <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Submit">
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <div class="container-fluid">
+        <div class="row">
+          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+            <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
+            </div>
+          </div>
+          <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
 
 
-  <div class="chart">
-    <svg/>
-  </div>
+          <div class="chart">
+            <svg/>
+          </div>
+          <!-- <canvas class="my-4 chartjs-render-monitor" id="myChart" width="2704" height="1140" style="display: block; height: 570px; width: 1352px;"></canvas> -->
 
-  <div class="table">
-    <table id="stats_table">
-    <thead>
-      <tr>
-        <th>Roll</th>
-        <th>Average Result</th>
-        <th>80% Range</th>
-        <th>Full Range</th>
-      </tr>
-    </thead>
-    <tbody id="stats_table_body">
-    </tbody>
-   </table>
-  </div>
+          <div class="table-responsive">
+            <table id="stats_table" class="table table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Roll</th>
+                  <th>Average Result</th>
+                  <th>80% Range</th>
+                  <th>Full Range</th>
+                </tr>
+              </thead>
+              <tbody id="stats_table_body">
+              </tbody>
+            </table>
+          </div>
+          </main>
+        </div>
+      </div>
+
 
   <script src="../static/chart.js"></script>
-
-</body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </html>
