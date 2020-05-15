@@ -1,8 +1,17 @@
 
 .navbar {
-  background-color: #8a4148
+  background-color: #8a4148;
 }
 
-.stats_table thead {
-  background-color: #8a4148
+#stats_table thead tr th {
+  background-color: #8a4148;
+}
+
+.jumbotron {
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+ }
+
+.error_msg {
+  text-align: center
 }
