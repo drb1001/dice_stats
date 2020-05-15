@@ -1,5 +1,6 @@
 import os
-from flask import Flask, request, render_template, jsonify
+import logging
+from flask import Flask, request, render_template, jsonify, abort
 from waitress import serve
 
 from utils import tidy_input, parse_input, calc_stats
@@ -22,11 +23,12 @@ with app.app_context():
     repopulate_roll_table(app, db)
 app.logger.info('Database tables populated')
 
+
 @app.route('/', methods=['GET'])
 def show_dice_stats():
 
-    d1_input = request.args.get('d1', None, type=str)
-    d2_input = request.args.get('d2', None, type=str)
+    d1_input = request.args.get('d1', "", type=str)
+    d2_input = request.args.get('d2', "", type=str)
     app.logger.info('D1 Input: {}; D2 input: {}'.format(d1_input, d2_input))
 
     context_dict = {'d1_value': d1_input, 'd2_value': d2_input}
@@ -36,22 +38,21 @@ def show_dice_stats():
 @app.route('/get_data', methods=['GET'])
 def get_data():
     input = request.args.get('d', None, type=str)
-    app.logger.info('get_data input:'.format(input))
+    app.logger.info('get_data input: {}'.format(input))
 
     # TODO: find a better way of cleaning the input
-    if input is not None and input != '':
+    if input is None or input == '':
+        abort(400)
+    else:
         input_tidy = tidy_input(input)
+        app.logger.info('input_tidy: {}'.format(input_tidy))
         input_parsed = parse_input(input_tidy)
-        rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
+        app.logger.info('input_parsed: {}'.format(input_parsed))
 
-        app.logger.info('00000000')
+        rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
         stats_output = calc_stats(app, name=input_tidy, rolls=rolls_output)
 
-        app.logger.info('11111111111')
-
-
-    return jsonify({'rolls': rolls_output, 'stats': stats_output})
-    # return jsonify()
+        return jsonify({'rolls': rolls_output, 'stats': stats_output})
 
 
 # sanity check route
@@ -68,6 +69,7 @@ if __name__ == '__main__':
     app.logger.info('Starting server')
 
     if env == "LOCAL_DEV":
+        app.logger.setLevel(logging.INFO)
         app.logger.info('In dev now')
         app.run(host='0.0.0.0', port=port, debug=True)
     else:
