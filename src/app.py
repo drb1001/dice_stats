@@ -9,11 +9,9 @@ from populate_tables import create_tables, repopulate_roll_table
 
 
 app = Flask(__name__)
-app.logger.info('App created')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
-app.logger.info('DATABASE_URL config set')
 
 
 from models import db, RollModel, RollDetailModel
@@ -21,7 +19,7 @@ db.init_app(app)
 with app.app_context():
     create_tables(app, db)
     repopulate_roll_table(app, db)
-app.logger.info('Database tables populated')
+app.logger.debug('Database tables populated')
 
 
 @app.route('/', methods=['GET'])
@@ -30,7 +28,6 @@ def show_dice_stats():
     d1_input = request.args.get('d1', "", type=str)
     d2_input = request.args.get('d2', "", type=str)
     app.logger.info('D1 Input: {}; D2 input: {}'.format(d1_input, d2_input))
-
     context_dict = {'d1_value': d1_input, 'd2_value': d2_input}
     return render_template('template.html', **context_dict)
 
@@ -45,12 +42,16 @@ def get_data():
         abort(400)
     else:
         input_tidy = tidy_input(input)
-        app.logger.info('input_tidy: {}'.format(input_tidy))
+        app.logger.debug('input_tidy: {}'.format(input_tidy))
+
         input_parsed = parse_input(input_tidy)
-        app.logger.info('input_parsed: {}'.format(input_parsed))
+        app.logger.debug('input_parsed: {}'.format(input_parsed))
 
         rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
-        stats_output = calc_stats(app, name=input_tidy, rolls=rolls_output)
+        app.logger.debug('rolls_output: {}'.format(rolls_output))
+
+        stats_output = calc_stats(roll_name=input_tidy, rolls=rolls_output)
+        app.logger.debug('stats_output: {}'.format(stats_output))
 
         return jsonify({'rolls': rolls_output, 'stats': stats_output})
 
@@ -69,9 +70,9 @@ if __name__ == '__main__':
     app.logger.info('Starting server')
 
     if env == "LOCAL_DEV":
-        app.logger.setLevel(logging.INFO)
-        app.logger.info('In dev now')
+        app.logger.setLevel(logging.DEBUG)
+        app.logger.info('Running dev server')
         app.run(host='0.0.0.0', port=port, debug=True)
     else:
-        app.logger.info('In prod now')
+        app.logger.info('Running prod server')
         serve(app, host="0.0.0.0", port=port)
