@@ -1,49 +1,61 @@
-import re
+import unittest
 
-def tidy_input(input):
-    """Takes the user input and parses / formats it
-    """
-
-    # remove spaces
-    # if ends in kh, kl, dh, dl, append 1 on the end
+from input_parser import tidy_input, parse_input
 
 
+class TestTidyInput(unittest.TestCase):
+    """Test the function tidy_input()"""
 
-    return imput
-
-
-def check_parsed_input(parsed_input):
-    """Check if the (parsed) input is in the tables
-
-    Expeceted input is of the form ndxkhm+c
-    """
-
-    assert re.match("^[0-9]+d[0-9]+ [kh|kl|dh|dl]{0,1}[0-9]{0}  []$").match(parsed_input)
-
-    n = int()
-    x = int()
-    kd_mod =
-    m = int()
-    c = int()
-
-    assert n >= 0 and n<=20
-    assert x in [2,3,4,5,6,8,10,12,20]
-    assert m >=0 and m<=20
-    assert m < n
-
-    return {
-        'input': parsed_input,
-        'n': n,
-        'x': x,
-        'kd_mod': kd_mod,
-        'm': m,
-        'c': c
-    }
+    def test_tidy_input(self):
+        self.assertEqual(tidy_input('2 d20  kh -4'), '2d20kh-4')
+        self.assertEqual(tidy_input('1d4 + 3'), '1d4+3')
+        self.assertEqual(tidy_input('1D2KH+0'), '1d2kh+0')
 
 
+class TestParseInput(unittest.TestCase):
+    """Test the function parse_input()"""
 
-# 10d6
-# 2d12+5
-# 1d100-1
-# 2d20dl1
-# 5d4kh3+3
+    def test_parse_input(self):
+
+        self.assertDictEqual(parse_input('10d6'),
+            {
+                'input': '10d6',
+                'input_no_const': '10d6',
+                'num': 10,
+                'sides': 6,
+                'kh_mod': None,
+                'r_mod': None,
+                'r_val': 0,
+                'const_sign': None,
+                'const': 0
+            })
+
+        self.assertDictEqual(parse_input('2d20dl-3'),
+            {
+                'input': '2d20dl-3',
+                'input_no_const': '2d20dl',
+                'num': 2,
+                'sides': 20,
+                'kh_mod': 'dl',
+                'r_mod': None,
+                'r_val': 0,
+                'const_sign': '-',
+                'const': -3
+            })
+
+        self.assertDictEqual(parse_input('4d12r<2+10'),
+            {
+                'input': '4d12r<2+10',
+                'input_no_const': '4d12r<2',
+                'num': 4,
+                'sides': 12,
+                'kh_mod': None,
+                'r_mod': 'r<',
+                'r_val': 2,
+                'const_sign': '+',
+                'const': 10
+            })
+
+
+if __name__ == '__main__':
+    unittest.main()
