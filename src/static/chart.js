@@ -85,7 +85,7 @@ function create_chart(d1_url, d2_url) {
          .style("color", function(d,i){return colorScale(i);});
 
       var td = table.selectAll("td")
-        .data(function(d, i) { return Object.values(d); })
+        .data(function(d, i) { return [d['name'], d['avg'], d['mode'], d['pct80_range'], d['max_range']] })
         .enter().append("td")
         .text(function(d) { return d; });
 
