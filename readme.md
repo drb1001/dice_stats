@@ -1,70 +1,37 @@
+# Dice Stats
 
-# docker build command:
-docker build -f docker/Dockerfile -t test-image .
+An experimental site that was hastily built during Covid-19 quarantine as a learning project.
 
+See: https://dice-stats.herokuapp.com/
 
-think about scale:
+Feel free to add issues (or pull requests)
 
-ndx + a <->  mdy + b
-ignore plus / minus
+---
 
-ndx:
- n in 1-20
- x in 2,3,4,6,8,10,12,20
+### Development:
 
+##### docker build command:
+`docker-compose up --build --force-recreate`
 
-worst case 20d20: 20-400 (~400)
-  -> 400*20*8 -> 64000
+##### Known issues / Work in progress:
 
-
-id, total, count
-1d2, 1, 1
-1d2, 2, 1
-2d2, 2, 1
-2d2, 3, 2
-2d2, 4, 1
-..
-
-- stats:
-- average roll (% of time)
-- expect to get between (around 80% of the time)
-- almost certain to get between (around 95% of the time)
-- theortical min (%) & max (%)
+1. Handle r<1 and ro<1 type rolls
+2. Better error handling and more useful error messages / validation
+3. Improve chart
+  - vertical lines eg for average
+  - better represent specific points - dots and hover?
+4. Improve responsiveness / mobile
 
 
-method to compare 2 (in general symetric so clear winner) -> compare only 2 (overlay?)
+##### Tech stack
+
+- Heroku + Docker
+- Postgres
+- Flask
+- Bootstap + D3
 
 
-script to populate table - method (iterate through)
--- populate with n=1 (range of values, count 1)
--- for n=1, running sum
-
-
-- next level - kh / dl - could start with n<=4 in all combinations?
-  -> script to populate all
-
-new table -> details?
-
-id, rolls, total, count
-1d2 [1]
-1d2 [2]
-2d2 [1,1], 2, 1
-2d2 [1,2], 3, 2
-2d2 [2,2], 4, 1
-..
-
-
--> validation khx or dlx - n should be lower than total
-id, total, count
-2d2kh1 1, 1
-2d2kh1 2, 3
-2d2kl1 1, 3
-2d2kl1 2, 1
-...
-
-Need a query parser prob (remove spaces, un-caps, map kh to kh1 etc)
-
-
+##### Useful links for future reference
 
 - https://medium.com/@dushan14/create-a-web-application-with-python-flask-postgresql-and-deploy-on-heroku-243d548335cc
 - https://gist.github.com/mayukh18/2223bc8fc152631205abd7cbf1efdd41/
