@@ -28,7 +28,7 @@ Feel free to add issues (or pull requests)
 - Heroku + Docker
 - Postgres
 - Flask
-- Bootstap + D3
+- Bootstrap + D3
 
 
 ##### Useful links for future reference
