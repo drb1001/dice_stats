@@ -9,12 +9,11 @@ from populate_tables import create_tables, repopulate_roll_table
 
 
 app = Flask(__name__)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 
 
-from models import db, RollModel, RollDetailModel
+from models import db, RollModel
 db.init_app(app)
 with app.app_context():
     app.logger.debug('Building and populating database tables')
