@@ -17,9 +17,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation w
 from models import db, RollModel, RollDetailModel
 db.init_app(app)
 with app.app_context():
+    app.logger.debug('Building and populating database tables')
     create_tables(app, db)
-app.logger.debug('Database tables populated')
     repopulate_roll_table(app, db, sides_list=[2,4,6,8,10,12,20], max_dice_total=10)
+    app.logger.debug('Database tables populated')
 
 
 @app.route('/', methods=['GET'])
@@ -71,8 +72,8 @@ if __name__ == '__main__':
 
     if env == "LOCAL_DEV":
         app.logger.setLevel(logging.DEBUG)
-        app.logger.info('Running dev server')
+        app.logger.info('Running on dev server')
         app.run(host='0.0.0.0', port=port, debug=True)
     else:
-        app.logger.info('Running prod server')
+        app.logger.info('Running on prod server')
         serve(app, host="0.0.0.0", port=port)
