@@ -49,15 +49,26 @@ function create_chart(d1_url, d2_url) {
       const x_scale_padding = 20;
       const x_width = Math.max(1, (x_scale(1) - x_scale_padding)/2);
 
-      // Draw ares chart for d1
+      // Draw area chart for d1
       g.append("path")
         .datum(d1_data_rolls)
         .attr("fill", colorScale(0))
         .attr("fill-opacity", 0.7)
         .attr("d", d3.area()
            .x(d => x_scale(d.pip_total))
-           .y0(y_scale(0))
            .y1(d => y_scale(d.probability))
+           .y0(y_scale(0))
+        );
+
+      // Draw line chart for d1
+      svg.append("path")
+        .datum(d1_data_rolls)
+        .attr("fill", "none")
+        .attr("stroke", colorScale(0))
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+          .x(d => x_scale(d.pip_total))
+          .y(d => y_scale(d.probability))
         );
 
       // Draw area charts for d2
@@ -69,6 +80,17 @@ function create_chart(d1_url, d2_url) {
            .x(d => x_scale(d.pip_total))
            .y0(y_scale(0))
            .y1(d => y_scale(d.probability))
+        );
+
+      // Draw line chart for d2
+      svg.append("path")
+        .datum(d2_data_rolls)
+        .attr("fill", "none")
+        .attr("stroke", colorScale(1))
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+          .x(d => x_scale(d.pip_total))
+          .y(d => y_scale(d.probability))
         );
 
       // Draw x-axis
