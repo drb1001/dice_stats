@@ -13,9 +13,12 @@ Feel free to add issues (or pull requests)
 ##### docker build command:
 `docker-compose up --build --force-recreate`
 
+##### Running on windows
+You may need to use the ip address of the virtualbox rather than localhost in a browser.
+Find this in `DOCKER_HOST` using `docker-machine env` after running `docker-machine start`.
+
 ##### Known issues / Work in progress:
 
-1. Handle r<1 and ro<1 type rolls
 2. Better error handling and more useful error messages / validation
 3. Improve chart
   - vertical lines eg for average

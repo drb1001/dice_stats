@@ -25,7 +25,7 @@ def parse_input(input):
       - sides: sides of each die (int)
       - kh_mod: the type of kh/dl modifier (str) - optional
       - r_mod: the type of reroll modifier (str) - optional
-      - r_val: the value od the reroll modifier (int) - default 0
+      - r_val: the value of the reroll modifier (int) - default 0
       - const_sign: sign of the constant value added (str) - optional
       - const: constant value added (int) - default 0
     """
