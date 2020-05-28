@@ -18,8 +18,8 @@ from models import db, RollModel, RollDetailModel
 db.init_app(app)
 with app.app_context():
     create_tables(app, db)
-    repopulate_roll_table(app, db)
 app.logger.debug('Database tables populated')
+    repopulate_roll_table(app, db, sides_list=[2,4,6,8,10,12,20], max_dice_total=10)
 
 
 @app.route('/', methods=['GET'])
