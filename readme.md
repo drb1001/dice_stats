@@ -19,11 +19,10 @@ Find this in `DOCKER_HOST` using `docker-machine env` after running `docker-mach
 
 ##### Known issues / Work in progress:
 
-2. Better error handling and more useful error messages / validation
-3. Improve chart
+1. Improve chart
   - vertical lines eg for average
-  - better represent specific points - dots and hover?
-4. Improve responsiveness / mobile
+  - hover?
+2. Improve responsiveness / mobile
 
 
 ##### Tech stack
