@@ -35,7 +35,7 @@ def add_base_rolls(app, db, sides_list, max_dice_total):
             db.session.commit()
 
         # Add for ndx (iterate thorugh the combinations)
-        for dice_next in range(1, max_dice_total):
+        for dice_next in range(1, max_dice_total+1):
             sql1 = f"""
                 WITH multi_roll AS (
                     SELECT
@@ -146,7 +146,7 @@ def add_r_rolls(app, db, sides_list, max_dice_total):
                 db.session.commit()
 
             # Add for ndx (iterate thorugh the combinations)
-            for dice_next in range(1, max_dice_total):
+            for dice_next in range(1, max_dice_total+1):
                 sql1 = f"""
                     WITH multi_roll AS (
                         SELECT
@@ -204,7 +204,7 @@ def add_ro_rolls(app, db, sides_list, max_dice_total):
                 db.session.commit()
 
                 # Add for ndx (iterate thorugh the combinations)
-                for dice_next in range(1, max_dice_total):
+                for dice_next in range(1, max_dice_total+1):
                     sql2 = f"""
                         WITH multi_roll AS (
                             SELECT
