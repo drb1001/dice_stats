@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from flask import Flask, request, render_template, jsonify
 from waitress import serve
@@ -8,8 +9,8 @@ from read_data import read_data_from_db
 from populate_tables import create_tables, repopulate_roll_table
 
 
-SIDES_LIST = [2,4,6,8,10,12,20]
-MAX_DICE_TOTAL = 9
+SIDES_LIST = json.loads(os.getenv("SIDES_LIST", "[2,4,6,8,10,12,20]"))
+MAX_DICE_TOTAL = int(os.getenv("MAX_DICE_TOTAL", "9"))
 
 
 app = Flask(__name__)
