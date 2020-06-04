@@ -230,7 +230,7 @@ def add_ro_rolls(app, db, sides_list, max_dice_total):
                     db.session.commit()
 
 
-def repopulate_roll_table(app, db, sides_list=[4,6,8,20], max_dice_total=10):
+def repopulate_roll_table(app, db, sides_list, max_dice_total):
     """Truncate tables and repopulate with data"""
 
     with app.app_context():

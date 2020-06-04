@@ -22,6 +22,8 @@ from models import db, RollModel
 db.init_app(app)
 with app.app_context():
     app.logger.debug('Building and populating database tables')
+    app.logger.debug(f'SIDES_LIST: {SIDES_LIST}')
+    app.logger.debug(f'SIDES_LIST: {MAX_DICE_TOTAL}')
     create_tables(app, db)
     repopulate_roll_table(app, db, sides_list=SIDES_LIST, max_dice_total=MAX_DICE_TOTAL)
     app.logger.debug('Database tables populated')
