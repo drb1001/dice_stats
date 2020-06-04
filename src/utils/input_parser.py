@@ -1,13 +1,14 @@
 import re
 
 
-class InvalidInput(Exception):
+class InvalidInput(ValueError):
     pass
 
 
 def tidy_input(input):
     """Takes the user input removes spaces and standardises other terms
     """
+
     assert isinstance(input, str)
 
     input_tidy = input.lower().replace(" ", "")
@@ -15,7 +16,7 @@ def tidy_input(input):
     return input_tidy
 
 
-def parse_input(input):
+def parse_input(input, sides, max_dice):
     """Check if the (parsed) input is in the tables
 
     Outputs a dict with keys:
@@ -34,7 +35,7 @@ def parse_input(input):
     regex_match = re.match(regex_str, input)
 
     if not regex_match:
-        raise InvalidInput(input, regex_match)
+        raise InvalidInput(f"Your input ({input}) could not be parsed as a dice roll")
 
     parsed_input = regex_match.groupdict()
 
@@ -51,9 +52,13 @@ def parse_input(input):
         parsed_input['const'] = -1 * parsed_input['const']
 
     # do some validations:
-    if parsed_input['num'] not in range(1,20) : raise InvalidInput(parsed_input, 1)
-    if parsed_input['sides'] not in [2,3,4,5,6,8,10,12,20] : raise InvalidInput(parsed_input, 2)
-    if parsed_input['r_mod'] is not None:
-        if parsed_input['r_val'] not in range(1, parsed_input['sides']): raise InvalidInput(parsed_input, 3)
+    if parsed_input['num'] not in range(1, max_dice+1):
+        raise InvalidInput(f"Invalid dice roll '{input}' - Number of dice ({parsed_input['num']}) must be between 1 and {max_dice}")
+    if parsed_input['sides'] not in sides:
+         raise InvalidInput(f"Invalid dice roll '{input}' - Number of sides ({parsed_input['sides']}) must be one of {sides}")
+    if parsed_input['r_mod'] is not None and parsed_input['r_val'] not in [1,2]:
+         raise InvalidInput(f"Invalid dice roll '{input}' - Currently only supported for: r<1, r<2, ro<1, ro<2")
+    if parsed_input['r_mod'] is not None and parsed_input['r_val'] not in range(1, parsed_input['sides']):
+        raise InvalidInput(f"Invalid dice roll '{input}' - the rerolls ({parsed_input['r_val']}) must be lower than the number of sides ({parsed_input['sides']})")
 
     return parsed_input

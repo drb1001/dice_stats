@@ -54,7 +54,7 @@
               <input class="form-control" type="text" id="d2Input" name="d2" value="{{d2_value}}" placeholder="eg: 2d20 kh -1">
             </div>
             <div class="form-group">
-              <input class="btn btn-default" type="submit" value="Submit">
+              <input class="btn btn-dark" type="submit" value="Submit">
             </div>
           </div>
         </form>
@@ -63,19 +63,19 @@
         Type your dice rolls <a target="_" href="https://wiki.roll20.net/Dice_Reference">as you would in Roll20</a>.
         Most of the same syntax is supported
         <a data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">(more info)</a>
-        <div class="collapse" id="collapseInfo">
-          <p class="small text-muted">
-              <ul class="small text-muted list-unstyled">
-                <li>Standard dice rolls (d2, d3, d4, d6, d8, d10, d12,d 20) upto 10 at a time, eg: <span class="font-weight-bold">10d6</span></li>
-                <li>Advantage and disadvantage rolls (rolling 2 dice) - use kh/dh/kl/dl for keep/drop highest/lowest, eg: <span class="font-weight-bold">2d20kh</span></li>
-                <li>A special roll used in 5e starting stats rolls - roll 4 d6 and remove the lowest, ie: <span class="font-weight-bold">4d6dl</span></li>
-                <li>Modifiers on all of the above between -10 and +10 (written at the end), eg: <span class="font-weight-bold">2d20kh+4</span></li>
-                <li>Rerolling specfic numbers (like brutal weapons in D&D 4e) - using r< (reroll anything less than or equal), eg: <span class="font-weight-bold">8d6r<1</span></li>
-                <li>Rerolling once for specfic numbers (like great weapon fighting in D&D 5e) - using ro< (reroll anything less than or equal, once only),  eg: <span class="font-weight-bold">3d10ro<2</span></li>
-              </ul>
+      </p>
+      <div class="collapse" id="collapseInfo">
+        <p class="small text-muted">
+            <ul class="small text-muted list-unstyled">
+              <li>Standard dice rolls (d2, d3, d4, d6, d8, d10, d12, d20) upto {{max_number_dice}} at a time, eg: <span class="font-weight-bold">5d6</span></li>
+              <li>Advantage and disadvantage rolls (rolling 2 dice) - use kh/dh/kl/dl for keep/drop highest/lowest, eg: <span class="font-weight-bold">2d20kh</span></li>
+              <li>A special roll used in 5e starting stats rolls - roll 4 d6 and remove the lowest, ie: <span class="font-weight-bold">4d6dl</span></li>
+              <li>Modifiers on all of the above between -10 and +10 (written at the end), eg: <span class="font-weight-bold">2d20kh+4</span></li>
+              <li>Rerolling specfic numbers (like brutal weapons in D&D 4e) - using r< (reroll anything less than or equal), eg: <span class="font-weight-bold">8d6r<1</span></li>
+              <li>Rerolling once for specfic numbers (like great weapon fighting in D&D 5e) - using ro< (reroll anything less than or equal, once only),  eg: <span class="font-weight-bold">3d10ro<2</span></li>
+            </ul>
           </p>
         </div>
-      </p>
     </div>
   </section>
 

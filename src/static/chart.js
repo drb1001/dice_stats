@@ -27,10 +27,40 @@ function create_chart(d1_url, d2_url) {
   var colorScale = d3.scaleOrdinal(d3.schemeSet1);
 
   Promise.all([
-      d3.json(d1_url),
-      d3.json(d2_url)
+      fetch(d1_url),
+      fetch(d2_url)
   ])
-  .then(([d1_data, d2_data]) =>  {
+  .then( function(result) {
+    return Promise.all(result.map(v => v.json().then(function(r) { return {"ok": v.ok, "json": r} }) ))
+  })
+  .catch(function(error){
+    console.log("ERROR");
+    console.log(error);
+  })
+  .then( function(data){
+
+    // API returns with bad data or error
+    if (!data[0].ok) {
+      console.log(data);
+      const chart_div = d3.select('.jumbotron');
+      chart_div.append("p")
+          .attr("class", "error_msg")
+          .text(data[0].json)
+          .style("color", "red");
+           // throw new Error(d, 422);
+    } else if (!data[1].ok) {
+      console.log(data);
+      const chart_div = d3.select('.jumbotron');
+      chart_div.append("p")
+          .attr("class", "error_msg")
+          .text(data[1].json)
+          .style("color", "red");
+           // throw new Error(d, 422);
+    } else {
+
+      const d1_data = data[0].json;
+      const d2_data = data[1].json;
+
       console.log(d1_data);
       console.log(d2_data);
 
@@ -110,19 +140,13 @@ function create_chart(d1_url, d2_url) {
         .data(function(d, i) { return [d['name'], d['avg'], d['mode'], d['pct80_range'], d['max_range']] })
         .enter().append("td")
         .text(function(d) { return d; });
-
+    }
   })
   .catch(function(error){
-     // handle error
-     const chart_div = d3.select('main');
-     chart_div.append("p").lower()
-        .attr("class", "error_msg")
-        .text("Unknown dice roll")
-        .style("color", "red");
-
+    console.log("ERROR");
+    console.log(error);
   })
 }
-
 
 
 const d1 = d3.select('#d1Input').property('value');
