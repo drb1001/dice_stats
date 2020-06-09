@@ -7,6 +7,7 @@ def read_data_from_db(app, db, Model, parsed_input):
                 .filter_by(dice_total=parsed_input['num'])
                 .filter_by(side_count=parsed_input['sides'])
                 .filter_by(roll_type=parsed_input['kh_mod'])
+                .order_by("id")
                 .all()
         )
         return [{'pip_total': r.pip_total + parsed_input['const'],
@@ -18,10 +19,11 @@ def read_data_from_db(app, db, Model, parsed_input):
                 .filter_by(dice_total=parsed_input['num'])
                 .filter_by(side_count=parsed_input['sides'])
                 .filter_by(roll_type='base')
+                .order_by("id")
                 .all()
         )
         return [{'pip_total': r.pip_total + parsed_input['const'],
-                'probability': r.get_r_data(parsed_input['r_mod'], parsed_input['r_val'])} 
+                'probability': r.get_r_data(parsed_input['r_mod'], parsed_input['r_val'])}
                 for r in rolls]
 
     else:
@@ -29,6 +31,7 @@ def read_data_from_db(app, db, Model, parsed_input):
                 .filter_by(dice_total=parsed_input['num'])
                 .filter_by(side_count=parsed_input['sides'])
                 .filter_by(roll_type='base')
+                .order_by("id")
                 .all()
         )
     return [{'pip_total': r.pip_total + parsed_input['const'],
