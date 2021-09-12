@@ -4,7 +4,7 @@ import logging
 from flask import Flask, request, render_template, jsonify
 from waitress import serve
 
-from utils import tidy_input, parse_input, calc_stats, InvalidInput
+from utils import tidy_input, parse_input, calc_stats, InvalidInput, DecimalEncoder
 from read_data import read_data_from_db
 from populate_tables import create_tables, repopulate_roll_table
 
@@ -60,7 +60,7 @@ def get_data():
             stats_output = calc_stats(roll_name=input_tidy, rolls=rolls_output)
             app.logger.debug('stats_output: {}'.format(stats_output))
 
-            return jsonify({'rolls': rolls_output, 'stats': stats_output})
+            return json.dumps({'rolls': rolls_output, 'stats': stats_output}, cls=DecimalEncoder)
 
         except InvalidInput as e:
             app.logger.debug('Caught error: {}'.format(str(e)))
