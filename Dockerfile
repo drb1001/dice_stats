@@ -6,6 +6,8 @@ RUN apk update && \
     apk add postgresql-dev && \
     rm -rf /var/cache/apk/*
 
+RUN apk add g++
+
 # no-cache-dir to reduce image size
 COPY requirements.txt /
 RUN pip install --no-cache-dir -r requirements.txt
