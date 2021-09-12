@@ -66,9 +66,9 @@ def get_data():
             app.logger.debug('Caught error: {}'.format(str(e)))
             return jsonify(str(e)), 422
 
-        except e:
+        except Exception as e:
             app.logger.debug('Other unknown error')
-            return jsonify(f"Unknown error {str(e)}"), 400
+            return jsonify(f"Unknown error: {str(e)}"), 400
 
 
 # sanity check route
