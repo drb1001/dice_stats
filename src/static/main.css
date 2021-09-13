@@ -7,6 +7,10 @@
   background-color: #8a4148;
 }
 
+#stats_table_body tr :first-child {
+  font-weight: bold;
+}
+
 .jumbotron {
     padding-bottom: 2rem;
     padding-top: 2rem;
