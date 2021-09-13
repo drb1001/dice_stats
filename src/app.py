@@ -9,7 +9,7 @@ from read_data import read_data_from_db
 from populate_tables import create_tables, repopulate_roll_table
 
 
-SIDES_LIST = json.loads(os.getenv("SIDES_LIST", "[2,4,6,8,10,12,20]"))
+SIDES_LIST = json.loads(os.getenv("SIDES_LIST", "[2,3,4,6,8,10,12,20]"))
 MAX_DICE_TOTAL = int(os.getenv("MAX_DICE_TOTAL", "9"))
 
 
