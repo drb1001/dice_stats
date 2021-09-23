@@ -60,5 +60,7 @@ def parse_input(input, sides, max_dice):
          raise InvalidInput(f"Invalid dice roll '{input}' - Currently only supported for: r<1, r<2, ro<1, ro<2")
     if parsed_input['r_mod'] is not None and parsed_input['r_val'] not in range(1, parsed_input['sides']):
         raise InvalidInput(f"Invalid dice roll '{input}' - the rerolls ({parsed_input['r_val']}) must be lower than the number of sides ({parsed_input['sides']})")
+    if parsed_input['kh_mod'] is not None and (parsed_input['num'] != 2 and parsed_input['input_no_const'] != '4d6dl'):
+        raise InvalidInput(f"Invalid dice roll '{input}' - kh/kl/dh/dl logic currently only supported for 2 dice (eg:2d20kh), or 4d6dl")
 
     return parsed_input
