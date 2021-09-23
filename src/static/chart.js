@@ -1,5 +1,7 @@
 
-function create_chart(d1_url, d2_url) {
+function create_chart(d_values) {
+
+  console.log(d_values);
 
   var svg_width = d3.select('.chart').node().getBoundingClientRect().width;
   const svg_dims = {width: svg_width, height: svg_width*0.5};
@@ -26,121 +28,98 @@ function create_chart(d1_url, d2_url) {
 
   var colorScale = d3.scaleOrdinal(d3.schemeSet1);
 
-  Promise.all([
-      fetch(d1_url),
-      fetch(d2_url)
-  ])
-  .then( function(result) {
+
+  Promise.all(d_values.map(
+    id => fetch('/get_data?d=' + encodeURIComponent(id)).then(resp => resp)
+  ))
+  .then(function(result){
     return Promise.all(result.map(v => v.json().then(function(r) { return {"ok": v.ok, "json": r} }) ))
   })
   .catch(function(error){
     console.log("ERROR");
     console.log(error);
   })
-  .then( function(data){
+  .then(function(data){
 
-    // API returns with bad data or error
-    if (!data[0].ok) {
-      console.log(data);
-      const chart_div = d3.select('.jumbotron');
-      chart_div.append("p")
-          .attr("class", "error_msg")
-          .text(data[0].json)
-          .style("color", "red");
-           // throw new Error(d, 422);
-    } else if (!data[1].ok) {
-      console.log(data);
-      const chart_div = d3.select('.jumbotron');
-      chart_div.append("p")
-          .attr("class", "error_msg")
-          .text(data[1].json)
-          .style("color", "red");
-           // throw new Error(d, 422);
-    } else {
+    // Work out the chart axis scales
+    console.log(data);
+    const data_comb = data.map(function(e){
+        if(typeof e.json === 'object' && e.json.hasOwnProperty('rolls')){
+          return e.json.rolls
+        } else {
+          return new Object
+        }
+    }).flat();
+    const max_pip_total = (_.max(_.mapObject(data_comb, d => d.pip_total)));
+    const max_prob = (_.max(_.mapObject(data_comb, d => d.probability)));
+    console.log('max_pip_total', max_pip_total, 'max_prob', max_prob);
 
-      const d1_data = data[0].json;
-      const d2_data = data[1].json;
+    x_scale.domain([0,max_pip_total]);
+    y_scale.domain([0, max_prob]).nice();
 
-      console.log(d1_data);
-      console.log(d2_data);
+    const x_scale_padding = 20;
+    const x_width = Math.max(1, (x_scale(1) - x_scale_padding)/2);
 
-      const d1_data_rolls = d1_data.rolls;
-      const d1_data_stats = d1_data.stats;
-      const d2_data_rolls = d2_data.rolls;
-      const d2_data_stats = d2_data.stats;
+    var draw_axes = false;
 
-      const data_comb = d1_data_rolls.concat(d2_data_rolls);
-      const max_pip_total = _.max(data_comb.map(d => d.pip_total));
-      const max_prob = _.max(data_comb.map(d => d.probability));
+    // Handle case when API returns with bad data or error
+    data.forEach(function(el, ix){
 
-      x_scale.domain([0,max_pip_total]);
-      y_scale.domain([0, max_prob]).nice();
+        if (!el.ok) {
+          console.log(el);
+          const chart_div = d3.select('.jumbotron');
+          chart_div.append("p")
+            .attr("class", "error_msg")
+            .text(data[ix].json)
+            .style("color", "red");
 
-      const x_scale_padding = 20;
-      const x_width = Math.max(1, (x_scale(1) - x_scale_padding)/2);
+        } else {
 
-      // Draw area chart for d1
-      g.append("path")
-        .datum(d1_data_rolls)
-        .attr("fill", colorScale(0))
-        .attr("fill-opacity", 0.7)
-        .attr("d", d3.area()
-           .x(d => x_scale(d.pip_total))
-           .y1(d => y_scale(d.probability))
-           .y0(y_scale(0))
-        );
+          draw_axes = true;
 
-      // Draw line chart for d1
-      svg.append("path")
-        .datum(d1_data_rolls)
-        .attr("fill", "none")
-        .attr("stroke", colorScale(0))
-        .attr("stroke-width", 1.5)
-        .attr("d", d3.line()
-          .x(d => x_scale(d.pip_total))
-          .y(d => y_scale(d.probability))
-        );
+          console.log(el.json);
+          const data_rolls = el.json.rolls;
+          const data_stats = el.json.stats;
 
-      // Draw area charts for d2
-      g.append("path")
-        .datum(d2_data_rolls)
-        .attr("fill", colorScale(1))
-        .attr("fill-opacity", 0.7)
-        .attr("d", d3.area()
-           .x(d => x_scale(d.pip_total))
-           .y0(y_scale(0))
-           .y1(d => y_scale(d.probability))
-        );
+          // Draw area chart
+          g.append("path")
+            .datum(data_rolls)
+            .attr("fill", colorScale(ix))
+            .attr("fill-opacity", 0.6)
+            .attr("d", d3.area()
+               .x(d => x_scale(d.pip_total))
+               .y0(y_scale(0))
+               .y1(d => y_scale(d.probability))
+            );
 
-      // Draw line chart for d2
-      svg.append("path")
-        .datum(d2_data_rolls)
-        .attr("fill", "none")
-        .attr("stroke", colorScale(1))
-        .attr("stroke-width", 1.5)
-        .attr("d", d3.line()
-          .x(d => x_scale(d.pip_total))
-          .y(d => y_scale(d.probability))
-        );
+          // Draw line chart
+          svg.append("path")
+            .datum(data_rolls)
+            .attr("fill", "none")
+            .attr("stroke", colorScale(ix))
+            .attr("stroke-width", 1.5)
+            .attr("d", d3.line()
+              .x(d => x_scale(d.pip_total))
+              .y(d => y_scale(d.probability))
+            );
+
+          // Add stats to the table
+          var table = d3.select("#stats_table_body")
+             .append("tr")
+             .style("color", colorScale(ix))
+             .html(`<td>${data_stats['name']}</td><td>${data_stats['avg']}</td><td>${data_stats['mode']}</td><td>${data_stats['pct80_range']}</td><td>${data_stats['max_range']}</td>`);
+
+        }
+      });
 
       // Draw x-axis
-      g.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x_scale));
+      if(draw_axes) {
+        g.append("g")
+          .attr("class", "x-axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x_scale));
+      }
 
-      // Update the table
-      var table = d3.select("#stats_table_body")
-         .selectAll("tr")
-         .data([d1_data_stats, d2_data_stats])
-         .enter().append("tr")
-         .style("color", function(d,i){return colorScale(i);});
-
-      var td = table.selectAll("td")
-        .data(function(d, i) { return [d['name'], d['avg'], d['mode'], d['pct80_range'], d['max_range']] })
-        .enter().append("td")
-        .text(function(d) { return d; });
-    }
   })
   .catch(function(error){
     console.log("ERROR");
@@ -149,11 +128,10 @@ function create_chart(d1_url, d2_url) {
 }
 
 
-const d1 = d3.select('#d1Input').property('value');
-const d2 = d3.select('#d2Input').property('value');
+const d_values = ['#d1Input', '#d2Input', '#d3Input'].map(
+  el => d3.select(el).property('value')
+).filter(
+  el => el
+);
 
-if (d1 && d2) {
-  const d1_url = '/get_data?d=' + encodeURIComponent(d1);
-  const d2_url = '/get_data?d=' + encodeURIComponent(d2);
-  create_chart(d1_url, d2_url);
-}
+create_chart(d_values);

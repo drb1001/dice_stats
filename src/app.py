@@ -34,8 +34,9 @@ def show_dice_stats():
 
     d1_input = request.args.get('d1', "", type=str)
     d2_input = request.args.get('d2', "", type=str)
-    app.logger.info('D1 Input: {}; D2 input: {}'.format(d1_input, d2_input))
-    context_dict = {'d1_value': d1_input, 'd2_value': d2_input, 'max_number_dice': MAX_DICE_TOTAL}
+    d3_input = request.args.get('d3', "", type=str)
+    app.logger.info('D1 Input: {}; D2 input: {}; D3 input: {}'.format(d1_input, d2_input, d3_input))
+    context_dict = {'d1_value': d1_input, 'd2_value': d2_input, 'd3_value': d3_input, 'max_number_dice': MAX_DICE_TOTAL}
     return render_template('template.html', **context_dict)
 
 
