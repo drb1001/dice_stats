@@ -35,7 +35,7 @@ def parse_input(input, sides, max_dice):
     regex_match = re.match(regex_str, input)
 
     if not regex_match:
-        raise InvalidInput(f"The input ({input}) could not be parsed as a dice roll. See <a target=\"_\" href=\"https://wiki.roll20.net/Dice_Reference\">Roll20 Dice Reference</a>")
+        raise InvalidInput(f"The input ({input}) could not be parsed as a dice roll. See https://wiki.roll20.net/Dice_Reference")
 
     parsed_input = regex_match.groupdict()
 
