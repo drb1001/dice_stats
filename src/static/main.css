@@ -19,3 +19,7 @@
 .error_msg {
   text-align: center
 }
+
+input::placeholder {
+  font-style: italic;
+}
