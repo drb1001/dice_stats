@@ -42,7 +42,7 @@ function create_chart(d_values) {
   .then(function(data){
 
     // Work out the chart axis scales
-    console.log(data);
+    console.log('data', data);
     const data_comb = data.map(function(e){
         if(typeof e.json === 'object' && e.json.hasOwnProperty('rolls')){
           return e.json.rolls
@@ -50,8 +50,9 @@ function create_chart(d_values) {
           return new Object
         }
     }).flat();
-    const max_pip_total = (_.max(_.mapObject(data_comb, d => d.pip_total)));
-    const max_prob = (_.max(_.mapObject(data_comb, d => d.probability)));
+    console.log('data_comb', data_comb)
+    const max_pip_total = (_.max(_.mapObject(data_comb, d => +d.pip_total)));
+    const max_prob = (_.max(_.mapObject(data_comb, d => +d.probability)));
     console.log('max_pip_total', max_pip_total, 'max_prob', max_prob);
 
     x_scale.domain([0,max_pip_total]);
