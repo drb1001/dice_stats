@@ -18,7 +18,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 
 
-from models import db, RollModel
+from models import db, RollModel, RollJsonModel
 db.init_app(app)
 with app.app_context():
     app.logger.debug('Building and populating database tables')

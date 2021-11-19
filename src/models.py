@@ -56,3 +56,25 @@ class RollModel(db.Model):
         elif r_mod == 'ro<':
             if r_val == 1: return self.ro1_prob
             elif r_val == 2: return self.ro2_prob
+
+
+class RollJsonModel(db.Model):
+    __tablename__ = 'roll_json'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    ndx_text = db.Column(db.String())
+    dice_total = db.Column(db.Integer, nullable=False)
+    side_count = db.Column(db.Integer, nullable=False)
+    roll_type = db.Column(db.String())
+    rolls_prob = db.Column(db.JSON())
+    
+    def __init__(self, ndx_text, dice_total, side_count, roll_type, rolls_prob):
+        self.ndx_text = ndx_text
+        self.dice_total = dice_total
+        self.side_count = side_count
+        self.roll_type = roll_type
+        self.rolls_prob = rolls_prob
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+
