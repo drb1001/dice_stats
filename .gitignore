@@ -7,3 +7,6 @@ __pycache__/*
 
 # dev config
 config.py
+
+
+.DS_Store

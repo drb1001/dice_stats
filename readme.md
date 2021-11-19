@@ -17,6 +17,10 @@ Feel free to add issues (or pull requests)
 You may need to use the ip address of the virtualbox rather than localhost in a browser.
 Find this in `DOCKER_HOST` using `docker-machine env` after running `docker-machine start`.
 
+
+##### PSQL for postgres inspection
+`docker exec -it <postgres_image> psql -U <user> -W <project>
+
 ##### Known issues / Work in progress:
 
 1. Improve chart
