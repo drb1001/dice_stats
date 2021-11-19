@@ -36,6 +36,29 @@ def read_data_from_db(app, db, Model, parsed_input):
                 .order_by("id")
                 .all()
         )
-    return [{'pip_total': r.pip_total + parsed_input['const'],
+        return [{'pip_total': r.pip_total + parsed_input['const'],
             'probability': r.base_prob}
             for r in rolls]
+
+
+def read_data_from_db_json(app, db, Model, parsed_input):
+    """ """
+
+    if parsed_input['kh_mod'] is not None:
+        roll_type=parsed_input['kh_mod']
+    elif parsed_input['r_mod'] in ['r<', 'ro<']:
+        roll_type=parsed_input['r_mod']+str(parsed_input['r_val'])
+    else:
+        roll_type='base'
+
+    rolls = (
+        Model.query
+        .filter_by(dice_total=parsed_input['num'])
+        .filter_by(side_count=parsed_input['sides'])
+        .filter_by(roll_type=roll_type)
+        .all()
+    )
+
+    rolls_prob = rolls[0].rolls_prob
+    return [{'pip_total': int(r) + parsed_input['const'], 'probability': rolls_prob[r]}
+                for r in rolls_prob.keys()]

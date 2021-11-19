@@ -5,7 +5,7 @@ from flask import Flask, request, render_template, jsonify
 from waitress import serve
 
 from utils import tidy_input, parse_input, calc_stats, InvalidInput, DecimalEncoder
-from read_data import read_data_from_db
+from read_data import read_data_from_db, read_data_from_db_json
 from populate_tables import create_tables, repopulate_roll_table
 
 
@@ -55,7 +55,8 @@ def get_data():
             input_parsed = parse_input(input_tidy, sides=SIDES_LIST, max_dice=MAX_DICE_TOTAL)
             app.logger.debug('input_parsed: {}'.format(input_parsed))
 
-            rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
+            # rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
+            rolls_output = read_data_from_db_json(app, db, RollJsonModel, input_parsed)
             app.logger.debug('rolls_output: {}'.format(rolls_output))
 
             stats_output = calc_stats(roll_name=input_tidy, rolls=rolls_output)
