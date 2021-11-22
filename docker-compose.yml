@@ -13,24 +13,33 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
     ports:
       - 5432:5432
-    networks:
-      - default
 
-  app:
-    container_name: app
+  api_service:
+    container_name: api_service
     restart: always
     build:
-      context: ./
+      context: api/
       dockerfile: Dockerfile
     ports:
-      - 5000:5000
+      - 8080:8080
     volumes:
-      - ./src/:/src/
-    environment:
-      - PORT=${PORT}
-      - APP_ENV=${APP_ENV}
-      - DATABASE_URL=${DATABASE_URL}
-    networks:
-      - default
+      - ./api/src/:/src/
+    env_file:
+      - ./api/.env
     depends_on:
       - postgres
+
+  frontend_service:
+    container_name: frontend_service
+    restart: always
+    build:
+      context: frontend/
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./frontend/src/:/src/
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - api_service
