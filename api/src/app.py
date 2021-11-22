@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import time
 from flask import Flask, request, render_template, jsonify
 from waitress import serve
 
@@ -12,6 +13,7 @@ from populate_tables import create_tables, repopulate_roll_table
 SIDES_LIST = json.loads(os.getenv("SIDES_LIST", "[2,3,4,6,8,10,12,20]"))
 MAX_DICE_TOTAL = int(os.getenv("MAX_DICE_TOTAL", "20"))
 
+time.sleep(3)  # sleep to make sure postgres is running
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
