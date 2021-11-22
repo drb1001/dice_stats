@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.9-alpine
 # See: https://hub.docker.com/_/python
 
 RUN apk update && \
