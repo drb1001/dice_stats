@@ -3,6 +3,7 @@ import json
 import logging
 import time
 from flask import Flask, request, render_template, jsonify
+from flask_cors import CORS
 from waitress import serve
 
 from utils import tidy_input, parse_input, calc_stats, InvalidInput, DecimalEncoder
@@ -16,6 +17,7 @@ MAX_DICE_TOTAL = int(os.getenv("MAX_DICE_TOTAL", "20"))
 time.sleep(3)  # sleep to make sure postgres is running
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 
