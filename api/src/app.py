@@ -30,15 +30,8 @@ with app.app_context():
 
 
 @app.route('/', methods=['GET'])
-def show_dice_stats():
-
-    d1_input = request.args.get('d1', "", type=str)
-    d2_input = request.args.get('d2', "", type=str)
-    d3_input = request.args.get('d3', "", type=str)
-    app.logger.info('D1 Input: {}; D2 input: {}; D3 input: {}'.format(d1_input, d2_input, d3_input))
-    context_dict = {'d1_value': d1_input, 'd2_value': d2_input, 'd3_value': d3_input, 'max_number_dice': MAX_DICE_TOTAL}
-    return render_template('template.html', **context_dict)
-
+def api():
+    return jsonify('API..')
 
 @app.route('/get_data', methods=['GET'])
 def get_data():
@@ -81,7 +74,7 @@ def canary():
 
 if __name__ == '__main__':
 
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
     env = os.environ.get("APP_ENV")
 
     app.logger.info('Starting server')

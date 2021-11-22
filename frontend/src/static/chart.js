@@ -30,7 +30,7 @@ function create_chart(d_values) {
 
 
   Promise.all(d_values.map(
-    id => fetch('/get_data?d=' + encodeURIComponent(id)).then(resp => resp)
+    id => fetch('http://localhost:8080/get_data?d=' + encodeURIComponent(id)).then(resp => resp)
   ))
   .then(function(result){
     return Promise.all(result.map(v => v.json().then(function(r) { return {"ok": v.ok, "json": r} }) ))
