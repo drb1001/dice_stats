@@ -19,11 +19,14 @@ Find this in `DOCKER_HOST` using `docker-machine env` after running `docker-mach
 
 ##### Known issues / Work in progress:
 
+0. Add multiple dice rolls (eg 1d6 + 3d4 + 5)
 1. Improve chart
   - vertical lines eg for average
   - hover?
 2. Improve responsiveness / mobile
-
+3. Add fudge dice
+4. Try converting to flat file format
+5. Add named rolls with text complete
 
 ##### Tech stack
 

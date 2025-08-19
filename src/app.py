@@ -4,8 +4,8 @@ import logging
 from flask import Flask, request, render_template, jsonify
 from waitress import serve
 
-from utils import tidy_input, parse_input, calc_stats, InvalidInput, DecimalEncoder
-from read_data import read_data_from_db
+from utils import tidy_input, split_input, parse_input, calc_stats, calculate_rolls, \
+                    InvalidInput, DecimalEncoder, read_data_from_db
 from populate_tables import create_tables, repopulate_roll_table
 
 
@@ -52,16 +52,16 @@ def get_data():
             input_tidy = tidy_input(input)
             app.logger.debug('input_tidy: {}'.format(input_tidy))
 
-            input_parsed = parse_input(input_tidy, sides=SIDES_LIST, max_dice=MAX_DICE_TOTAL)
-            app.logger.debug('input_parsed: {}'.format(input_parsed))
+            input_split = split_input(input_tidy)
+            app.logger.debug('input_split: {}'.format(input_split))
 
-            rolls_output = read_data_from_db(app, db, RollModel, input_parsed)
-            app.logger.debug('rolls_output: {}'.format(rolls_output))
+            output_combined = calculate_rolls(input_split, SIDES_LIST, MAX_DICE_TOTAL, app, db, RollModel)
+            app.logger.debug('output combined: {}'.format(output_combined))
 
-            stats_output = calc_stats(roll_name=input_tidy, rolls=rolls_output)
+            stats_output = calc_stats(roll_name=input_tidy, rolls=output_combined)
             app.logger.debug('stats_output: {}'.format(stats_output))
 
-            return json.dumps({'rolls': rolls_output, 'stats': stats_output}, cls=DecimalEncoder)
+            return json.dumps({'rolls': output_combined, 'stats': stats_output}, cls=DecimalEncoder)
 
         except InvalidInput as e:
             app.logger.debug('Caught error: {}'.format(str(e)))
